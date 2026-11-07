@@ -25,7 +25,7 @@ set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fakedsplit:payload=http_req:ip_auto
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 
 set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=443 --filter-l7=tls --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist="%ROOT%lists\list-google.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=tls_client_hello
-set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=syndata:tls_mod=rnd,rndsni
+set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=syndata:blob=fake_default_tls:tls_mod=rnd,rndsni
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=fake_default_tls:payload=tls_client_hello:repeats=8:tls_mod=rnd,dupsid,sni=www.google.com
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=multidisorder:payload=tls_client_hello:pos=1,midsld
 set PROFILE_ARGS=%PROFILE_ARGS% --new
