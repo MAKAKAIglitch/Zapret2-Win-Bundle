@@ -34,11 +34,11 @@ set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=quic_google:payload=quic_
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 
 if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=80,443 %IPSET_INCLUDE% --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=all
-set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=2:ip_autottl=-2,3-20:ip6_autottl=-2,3-20
+if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=2:ip_autottl=-2,3-20:ip6_autottl=-2,3-20
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 
 if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --filter-udp=443 %IPSET_INCLUDE% --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=all
-set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=2:ip_autottl=-2,3-20:ip6_autottl=-2,3-20
+if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=2:ip_autottl=-2,3-20:ip6_autottl=-2,3-20
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 
 set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=500,1701,2408,4500,8095 --payload=all
