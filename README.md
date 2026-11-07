@@ -43,7 +43,7 @@ The profiles enable --wf-tcp-empty=1. Capturing empty TCP ACK packets improves p
 
 Lists were copied from [MAKAKAIglitch/zapret-discord-youtube-warp/lists](https://github.com/MAKAKAIglitch/zapret-discord-youtube-warp/tree/main/lists).
 
-In the source repository, lists/ipset-all.txt was a 17-byte placeholder. Its full 33,336-entry IPv4/IPv6 list was stored in lists/ipset-all.txt.backup. This project promotes that full backup content to lists/ipset-all.txt and keeps the placeholder under lists/source/.
+In the source repository, lists/ipset-all.txt was a 17-byte placeholder. Its full 33,336-entry IPv4/IPv6 CIDR set was stored in lists/ipset-all.txt.backup. The source's .service/ipset-service.txt contains the same CIDR entries with different line endings. This project promotes the requested lists/ipset-all.txt.backup content to lists/ipset-all.txt and keeps the placeholder under lists/source/.
 
 See lists/SOURCES.md for details.
 
