@@ -5,6 +5,7 @@ The repository keeps project-owned Windows scripts separate from third-party run
 - service.bat is the only root-level launcher. It handles elevation, service operations, and the strategy menu.
 - strategies/ contains one profile per file. Only files ending in .strategy.cmd are shown in the menu.
 - bin/ is the local copy of the upstream zapret-winws runtime and is intentionally excluded from Git.
+- data/ stores the locally selected strategy; the state file is ignored by Git.
 - docs/ contains project-maintenance notes.
 
 ## Why Zapret 2 profiles are separate
