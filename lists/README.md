@@ -16,3 +16,5 @@ User-editable files:
 - ipset-exclude-user.txt — IP addresses/CIDRs to exclude.
 
 The service strategies combine the standard lists with the corresponding user lists. One hostname or IP/CIDR per line. Keep comments on lines beginning with #.
+
+The service menu offers IPSet modes ANY (no include filter), LOADED (use ipset-all.txt) and NONE (skip IPSet-only rules). ANY is not represented by an empty file in Zapret 2; it is represented by omitting the --ipset include filter. The separate ipset-any.bat and ipset-loaded-auto.bat profiles run their fixed mode across all local TCP/UDP ports.
