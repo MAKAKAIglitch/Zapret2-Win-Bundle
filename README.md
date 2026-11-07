@@ -49,7 +49,7 @@ See lists/SOURCES.md for details.
 
 ## IPSet modes
 
-The service menu cycles the optional IPSet blocks used by General, General ALT and General AUTO: **ANY** (default; no include filter), **LOADED** (the full lists/ipset-all.txt list), and **NONE** (skip those IPSet-only blocks). Domain hostlist rules and the five extra port rules remain active in all three modes. The dedicated IPSet ANY AUTO and IPSet LOADED AUTO profiles have fixed behavior independent of this switch. Zapret 2 does not treat a zero-byte include list as ANY; ANY is implemented by omitting `--ipset` while retaining the exclusion lists.
+The service menu cycles the optional IPSet inclusion blocks used by General, General ALT and General AUTO: **ANY** (default; no include filter), **LOADED** (the full lists/ipset-all.txt list), and **NONE** (skip those broad IPSet-only blocks). Domain hostlist rules and the five extra port rules remain active in all three modes; reserved/private IP exclusion lists remain attached to the domain rules. The dedicated IPSet ANY AUTO and IPSet LOADED AUTO profiles have fixed behavior independent of this switch. Zapret 2 does not treat a zero-byte include list as ANY; ANY is implemented by omitting `--ipset` while retaining the exclusion lists.
 
 ## Service manager
 
