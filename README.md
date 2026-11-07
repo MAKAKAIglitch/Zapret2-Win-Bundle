@@ -5,7 +5,7 @@ A Windows BAT-based bundle manager for Zapret 2. The service manager and strateg
 ## Layout
 
 - service.bat — service manager and strategy selector
-- general.bat, general (ALT).bat, general (AUTO).bat, ipset-any.bat — root-level strategies
+- general.bat, general (ALT).bat, general (AUTO).bat, ipset-any.bat, ipset-loaded-auto.bat — root-level strategies
 - bin/ — upstream Windows runtime (not committed)
 - lists/ — domain lists and IP sets
 - utils/ — helper BAT files
@@ -24,15 +24,16 @@ A Windows BAT-based bundle manager for Zapret 2. The service manager and strateg
 - General — static HTTP/TLS/QUIC rules, IP-set rules, and the requested ports.
 - General ALT — alternative TLS initialization.
 - General AUTO — automatic per-host strategy rotation using zapret-auto.lua.
-- IPSet ANY AUTO — automatic per-host rotation for all TCP/UDP ports matched by ipset-all.txt, with payload=all.
+- IPSet ANY AUTO — automatic rotation for all local TCP/UDP ports (1–65535), with no include IP-set restriction.
+- IPSet LOADED AUTO — the same all-port automatic profile, restricted to the 33,336-entry lists/ipset-all.txt.
 
-The automatic profiles use the upstream circular orchestrator. It rotates among strategy variants when connection failure feedback is detected. This is feedback-based automation, not an external connectivity test, and cannot guarantee the best strategy on every network.
+The automatic profiles use Zapret 2's upstream circular orchestrator. It rotates among strategy variants based on connection-feedback counters. For each profile block, incoming packets are enabled while the circular detector runs and then disabled for the outgoing desync actions. This is feedback-based automation, not an external connectivity test, and cannot guarantee the best strategy on every network.
 
 ## Requested ports
 
 General, General ALT and General AUTO intercept TCP and UDP ports 500, 1701, 2408, 4500 and 8095 in both directions. These profiles include payload=all rules for the five ports.
 
-IPSet ANY AUTO is broader: it captures TCP and UDP ports 1-65535 in both directions, then selects addresses using lists/ipset-all.txt. It is not limited to the five additional ports.
+The two IPSet AUTO profiles are broader: they capture TCP and UDP ports 1–65535 in both directions. ANY omits the IP-set include filter and applies to all eligible remote addresses; LOADED selects addresses using lists/ipset-all.txt. They are not limited to the five additional ports.
 
 The inbound filters provide connection feedback; the Lua desync actions principally affect outgoing packets. Windows WinDivert does not correctly intercept forwarded traffic behind Windows NAT; this bundle is intended for traffic to/from the local PC.
 
@@ -45,6 +46,10 @@ Lists were copied from [MAKAKAIglitch/zapret-discord-youtube-warp/lists](https:/
 In the source repository, lists/ipset-all.txt was a 17-byte placeholder. Its full 33,336-entry IPv4/IPv6 list was stored in lists/ipset-all.txt.backup. This project promotes that full backup content to lists/ipset-all.txt and keeps the placeholder under lists/source/.
 
 See lists/SOURCES.md for details.
+
+## IPSet modes
+
+The service menu cycles the optional IPSet blocks used by General, General ALT and General AUTO: **ANY** (default; no include filter), **LOADED** (the full lists/ipset-all.txt list), and **NONE** (skip those IPSet-only blocks). Domain hostlist rules and the five extra port rules remain active in all three modes. The dedicated IPSet ANY AUTO and IPSet LOADED AUTO profiles have fixed behavior independent of this switch. Zapret 2 does not treat a zero-byte include list as ANY; ANY is implemented by omitting `--ipset` while retaining the exclusion lists.
 
 ## Service manager
 
