@@ -101,6 +101,7 @@ set "PROFILE_ARGS="
 set "PROFILE_NEEDS_AUTO_LUA=0"
 set "PROFILE_NEEDS_LISTS=0"
 set "PROFILE_NEEDS_IPSET=0"
+set "PROFILE_NEEDS_IPSET_ALWAYS=0"
 call "%ROOT%%SELECTED_PROFILE%" --profile
 if not defined PROFILE_ARGS set "PROFILE_TITLE=Profile load error"
 exit /b 0
@@ -131,6 +132,7 @@ for %%F in ("%ROOT%*.bat") do (
         set "PROFILE_NEEDS_AUTO_LUA=0"
         set "PROFILE_NEEDS_LISTS=0"
         set "PROFILE_NEEDS_IPSET=0"
+        set "PROFILE_NEEDS_IPSET_ALWAYS=0"
         call "%%~fF" --profile
         if defined PROFILE_ARGS (
             set /a COUNT+=1
@@ -220,7 +222,16 @@ if "!PROFILE_NEEDS_LISTS!"=="1" (
     )
 )
 
-if "!PROFILE_NEEDS_IPSET!"=="1" if /i "!IPSET_MODE!"=="loaded" (
+if "!PROFILE_NEEDS_IPSET_ALWAYS!"=="1" (
+    for %%F in (ipset-all.txt ipset-exclude.txt ipset-exclude-user.txt) do (
+        if not exist "%LISTS%\%%F" (
+            echo [MISSING] lists\%%F
+            set /a MISSING+=1
+        ) else (
+            echo [OK] lists\%%F
+        )
+    )
+) else if "!PROFILE_NEEDS_IPSET!"=="1" if /i "!IPSET_MODE!"=="loaded" (
     if not exist "%LISTS%\ipset-all.txt" (
         echo [MISSING] lists\ipset-all.txt
         set /a MISSING+=1
