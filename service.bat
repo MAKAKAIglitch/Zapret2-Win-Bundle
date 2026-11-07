@@ -50,8 +50,8 @@ echo    3. Start service
 echo    4. Stop service
 echo    5. Remove service
 echo    6. Check runtime and lists
-    echo    7. Change IPSet mode
- echo.
+echo    7. Change IPSet mode
+echo.
 echo    0. Exit
 echo  ------------------------------------------------------------
 echo.
