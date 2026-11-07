@@ -7,6 +7,7 @@ Windows BAT-based bundle manager for **Zapret 2**. The project keeps the launche
 - service.bat — service manager and strategy selector
 - strategies/ — Zapret 2 profiles
 - bin/ — upstream runtime files (not committed)
+- data/ — local selected-strategy state
 - docs/ — project documentation
 - LICENSE — applies to this repository's original scripts and documentation
 
