@@ -1,0 +1,8 @@
+# Local upstream runtime. Keep the documented directory, not third-party binaries.
+bin/*
+!bin/README.md
+
+# Local diagnostics and temporary output
+logs/
+*.log
+*.tmp
