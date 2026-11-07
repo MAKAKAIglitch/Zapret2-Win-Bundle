@@ -51,6 +51,7 @@ echo    4. Stop service
 echo    5. Remove service
 echo    6. Check runtime and lists
 echo    7. Change IPSet mode
+echo    8. Download / update runtime
 echo.
 echo    0. Exit
 echo  ------------------------------------------------------------
@@ -85,6 +86,10 @@ if "!CHOICE!"=="6" (
 )
 if "!CHOICE!"=="7" (
     call :ipset_switch
+    goto menu
+)
+if "!CHOICE!"=="8" (
+    call "%ROOT%SETUP_RUNTIME.bat"
     goto menu
 )
 if "!CHOICE!"=="0" exit /b 0

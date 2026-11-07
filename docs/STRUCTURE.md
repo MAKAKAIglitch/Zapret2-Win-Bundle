@@ -4,12 +4,13 @@ The repository owns a small Windows BAT launcher layer and uses the upstream Zap
 
 Root:
 - service.bat — service manager and profile selector.
+- SETUP_RUNTIME.bat — pinned upstream runtime downloader.
 - general.bat, general (ALT).bat, general (AUTO).bat, ipset-any.bat — selectable strategy profiles.
 
 Folders:
 - bin/ — local upstream runtime; excluded from Git.
 - lists/ — copied domain and IP-set lists plus user-editable lists.
-- utils/ — helper scripts used by root-level profiles.
+- utils/ — helper scripts used by root-level profiles, including setup-runtime.ps1.
 - data/ — local selected profile and IPSet mode state; selected-profile.txt and ipset-mode.txt are ignored by Git.
 - docs/ — project documentation.
 

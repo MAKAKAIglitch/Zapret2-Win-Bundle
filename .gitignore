@@ -11,3 +11,5 @@ logs/
 data/selected-profile.txt
 
 data/ipset-mode.txt
+
+data/runtime-backup/
