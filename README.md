@@ -6,7 +6,7 @@ A Windows BAT-based bundle manager for Zapret 2. The service manager and strateg
 
 - service.bat — service manager and strategy selector
 - SETUP_RUNTIME.bat — downloads and verifies the pinned upstream Windows runtime
-- general*.bat, ipset-any.bat, ipset-loaded-auto.bat — root-level strategy profiles (12 selectable profiles)
+- general*.bat, ipset-any.bat, ipset-loaded-auto.bat — root-level strategy profiles (15 selectable profiles)
 - bin/ — upstream Windows runtime (not committed)
 - lists/ — domain lists and IP sets
 - utils/ — helper BAT files
@@ -34,8 +34,11 @@ The selector now offers 12 root-level profiles:
 - General MultiSplit — TCP segmentation without fake packets.
 - General MultiDisorder — TCP segments sent in reverse order.
 - General HostFakeSplit — host-focused fake/split method; experimental.
+- General FakedDisorder — fake segments plus reverse-order segmentation.
 - General Legacy MultiDisorder — legacy disorder algorithm for comparison.
 - General Window (WSSIZE) — small TCP receive window plus multisplit; experimental and potentially slower.
+- General SynData — experimental SYN-data injection plus the regular HTTP/TLS/QUIC profile.
+- General QUIC Default Fake — uses the built-in default QUIC fake instead of the Google QUIC blob.
 - IPSet ANY AUTO — automatic rotation for all local TCP/UDP ports (1–65535), with no include IP-set restriction.
 - IPSet LOADED AUTO — the same all-port automatic profile, restricted to the 33,336-entry lists/ipset-all.txt.
 
