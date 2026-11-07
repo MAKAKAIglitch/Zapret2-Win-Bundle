@@ -6,3 +6,6 @@ bin/*
 logs/
 *.log
 *.tmp
+
+# Selected local strategy (written by service.bat)
+data/selected-profile.txt
