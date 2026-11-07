@@ -1,0 +1,2 @@
+# Add IPv4/IPv6 addresses or CIDR ranges to exclude.
+# One address or subnet per line. Example: 192.0.2.0/24

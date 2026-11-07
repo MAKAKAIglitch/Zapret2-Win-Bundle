@@ -1,17 +1,16 @@
 # Repository layout
 
-The repository keeps project-owned Windows scripts separate from third-party runtime files.
+The repository owns a small Windows BAT launcher layer and uses the upstream Zapret 2 Windows bundle as its runtime.
 
-- service.bat is the only root-level launcher. It handles elevation, service operations, and the strategy menu.
-- strategies/ contains one profile per file. Only files ending in .strategy.cmd are shown in the menu.
-- bin/ is the local copy of the upstream zapret-winws runtime and is intentionally excluded from Git.
-- data/ stores the locally selected strategy; the state file is ignored by Git.
-- docs/ contains project-maintenance notes.
+Root:
+- service.bat — service manager and profile selector.
+- general.bat, general (ALT).bat, general (AUTO).bat, ipset-any.bat — selectable strategy profiles.
 
-## Why Zapret 2 profiles are separate
+Folders:
+- bin/ — local upstream runtime; excluded from Git.
+- lists/ — copied domain and IP-set lists plus user-editable lists.
+- utils/ — helper scripts used by root-level profiles.
+- data/ — local selected profile state; selected-profile.txt is ignored by Git.
+- docs/ — project documentation.
 
-Zapret 2 uses winws2.exe and Lua initialization. Flowseal's common BAT profiles are written for the Zapret 1 winws.exe command-line interface, so their command lines cannot be reused as-is. The strategy files in this repository are adapted from the upstream Zapret 2 Windows examples.
-
-## Service ownership
-
-The manager uses the dedicated service name Zapret2WinBundle. Stop/remove operations target this service only. It deliberately does not taskkill every winws2.exe process, because another installation or a manually started instance may be using that executable.
+Strategy BAT files export PROFILE_TITLE and PROFILE_ARGS when called with --profile. service.bat discovers them by scanning root-level BAT files, excluding itself.

@@ -1,54 +1,62 @@
 # Zapret2-Win-Bundle
 
-Windows BAT-based bundle manager for **Zapret 2**. The project keeps the launcher and strategy profiles separate from upstream engine files.
+A Windows BAT-based bundle manager for Zapret 2. The service manager and strategy BAT files live in the repository root; runtime files, lists and helpers are separated into folders.
 
-## Structure
+## Layout
 
 - service.bat — service manager and strategy selector
-- strategies/ — Zapret 2 profiles
-- bin/ — upstream runtime files (not committed)
+- general.bat, general (ALT).bat, general (AUTO).bat, ipset-any.bat — root-level strategies
+- bin/ — upstream Windows runtime (not committed)
+- lists/ — domain lists and IP sets
+- utils/ — helper BAT files
+- docs/ — project notes
 - data/ — local selected-strategy state
-- docs/ — project documentation
-- LICENSE — applies to this repository's original scripts and documentation
 
-## Preparing the runtime
+## Prepare runtime
 
 1. Download the Windows bundle from [bol-van/zapret-win-bundle](https://github.com/bol-van/zapret-win-bundle).
-2. Open its zapret-winws directory.
-3. Copy the **contents** of zapret-winws into this repository's bin directory.
-4. Check that bin\winws2.exe, bin\lua\zapret-lib.lua, and the WinDivert files exist.
+2. Copy the contents of its zapret-winws folder into this repository's bin folder.
+3. Keep winws2.exe and all Lua files from the same upstream revision.
+4. Run service.bat and choose option 6 to check the runtime.
 
-Do not mix winws2.exe with Lua scripts from another revision. Zapret 2 checks Lua compatibility.
+## Strategies
 
-## Usage
+- General — static HTTP/TLS/QUIC rules, IP-set rules, and the requested ports.
+- General ALT — alternative TLS initialization.
+- General AUTO — automatic per-host strategy rotation using zapret-auto.lua.
+- IPSet ANY — IP-set matching and Lua handling for all payload types.
 
-Run service.bat. The manager requests administrator rights because Windows service operations require them.
+The automatic profile uses the upstream circular orchestrator. It rotates among strategy variants when connection failure feedback is detected. This is feedback-based automation, not an external connectivity test, and cannot guarantee the best strategy on every network.
 
-1. Select a strategy.
-2. Run the component check.
-3. Install/update the Zapret2WinBundle service.
-4. Start or stop the service from the same menu.
+## Requested ports
 
-The service is configured for automatic startup with Windows. The manager only stops or removes its own service; it does not terminate every winws2.exe process on the machine.
+All five ports are intercepted in both directions for TCP and UDP:
 
-## Included profiles
+- 500
+- 1701
+- 2408
+- 4500
+- 8095
 
-- **General** — general HTTP, TLS, QUIC and protocol filters, based on the upstream preset2_example.cmd.
-- **General ALT** — same profile with the upstream TLS randomization initialization example.
-- **WireGuard** — separate WireGuard initiation profile based on the upstream preset2_wireguard.cmd; it is not a general browsing profile.
+The profiles use --payload=all and explicitly pass payload=all to Lua desync actions. --wf-tcp-empty=1 additionally captures empty TCP packets for the selected TCP ports and can increase CPU overhead.
 
-See [strategies/README.md](strategies/README.md) for details.
+## Lists
 
-## Important service-mode note
+Lists were copied from [MAKAKAIglitch/zapret-discord-youtube-warp/lists](https://github.com/MAKAKAIglitch/zapret-discord-youtube-warp/tree/main/lists).
 
-The upstream Windows bundle includes a Zapret 2 service-creation example, but its automatic sc create calls are commented out and the file warns that service installation needs manual configuration. This project exposes service installation through an explicit confirmation prompt and performs file checks first, but the service mode is still **experimental** and has not been runtime-tested here. If the service does not start correctly, use the upstream standalone preset workflow and report the exact error/status.
+In the source repository, lists/ipset-all.txt was a 17-byte placeholder. Its full 33,336-entry IPv4/IPv6 list was stored in lists/ipset-all.txt.backup. This project promotes that full backup content to lists/ipset-all.txt and keeps the placeholder under lists/source/.
 
-## Upstream components and licensing
+See lists/SOURCES.md for details.
 
-This repository does not include winws2.exe, WinDivert binaries, or the upstream Lua runtime. Those files remain separate upstream components and retain their own licenses and notices. The root LICENSE applies to the original scripts and documentation in this repository only.
+## Service manager
 
-Upstream references:
-- [Zapret Windows bundle](https://github.com/bol-van/zapret-win-bundle)
-- [Zapret 2 source](https://github.com/bol-van/zapret2)
-- [Upstream Zapret 2 Windows preset](https://github.com/bol-van/zapret-win-bundle/blob/master/zapret-winws/preset2_example.cmd)
-- [Upstream WireGuard preset](https://github.com/bol-van/zapret-win-bundle/blob/master/zapret-winws/preset2_wireguard.cmd)
+Run service.bat as administrator. It manages the dedicated Zapret2WinBundle service. Stop/remove operations target only that service. Strategy BAT files can also be run directly.
+
+The upstream Zapret 2 Windows bundle leaves its service creation example commented out and warns that service mode requires manual configuration. Therefore this project's service mode remains experimental until tested on the target Windows installation.
+
+## Upstream
+
+- [Zapret 2 Windows bundle](https://github.com/bol-van/zapret-win-bundle)
+- [Zapret 2 source and manual](https://github.com/bol-van/zapret2)
+- [Upstream Zapret 2 preset](https://github.com/bol-van/zapret-win-bundle/blob/master/zapret-winws/preset2_example.cmd)
+- [Zapret 2 automatic strategy library](https://github.com/bol-van/zapret-win-bundle/blob/master/zapret-winws/lua/zapret-auto.lua)

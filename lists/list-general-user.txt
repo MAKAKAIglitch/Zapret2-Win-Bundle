@@ -1,0 +1,2 @@
+# Add hostnames that should use the general strategy.
+# One hostname per line. Example: example.com
