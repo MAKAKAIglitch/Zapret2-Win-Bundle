@@ -16,8 +16,11 @@ The service selector discovers root-level BAT files that export PROFILE_ARGS. Cu
 | `general-multisplit.bat` | Pure multisplit | TCP segmentation without fake |
 | `general-multidisorder.bat` | Multidisorder | Sends split TCP segments in reverse order |
 | `general-hostfakesplit.bat` | HostFakeSplit | Experimental host-focused method |
+| `general-fakeddisorder.bat` | fakeddisorder | Fake segments plus reverse-order split |
 | `general-legacy-disorder.bat` | multidisorder_legacy | Compatibility comparison |
 | `general-window.bat` | WSSIZE + multisplit | Experimental; can reduce throughput |
+| `general-syndata.bat` | syndata + baseline | Experimental SYN-data injection |
+| `general-quic-default.bat` | Built-in default QUIC fake | Alternative QUIC fake source |
 | `ipset-any.bat` | All-port automatic profile, no IPSet include | Captures local TCP/UDP 1–65535 |
 | `ipset-loaded-auto.bat` | All-port automatic profile, loaded IPSet only | Uses `lists/ipset-all.txt` |
 
