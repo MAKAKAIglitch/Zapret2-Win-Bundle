@@ -24,7 +24,7 @@ The installer does not execute the downloaded binaries. The selected upstream co
 
 ## Strategies
 
-The selector now offers 12 root-level profiles:
+The selector now offers 15 root-level profiles:
 
 - General — balanced static HTTP/TLS/QUIC profile.
 - General ALT — alternate TLS fingerprint/SNI handling.
