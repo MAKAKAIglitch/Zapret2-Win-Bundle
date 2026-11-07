@@ -26,7 +26,7 @@ set PROFILE_ARGS=%PROFILE_ARGS% --new
 
 set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=443 --filter-l7=tls --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist="%ROOT%lists\list-google.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=tls_client_hello
 set PROFILE_ARGS=%PROFILE_ARGS% --in-range=a
-set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=wssize:wsize=1:scale=6
+set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=wssize:dir=in:wsize=1:scale=6
 set PROFILE_ARGS=%PROFILE_ARGS% --in-range=x
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=multisplit:payload=tls_client_hello:pos=2,midsld-2:seqovl=1
 set PROFILE_ARGS=%PROFILE_ARGS% --new
