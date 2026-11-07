@@ -300,8 +300,23 @@ if not defined PROFILE_ARGS (
 )
 call :check_runtime
 if errorlevel 1 (
-    pause
-    exit /b 1
+    echo.
+    set "DOWNLOAD_RUNTIME="
+    set /p "DOWNLOAD_RUNTIME=Runtime files are missing. Download and verify them now? [Y/N]: "
+    if /i not "!DOWNLOAD_RUNTIME!"=="Y" (
+        pause
+        exit /b 1
+    )
+    call :install_runtime
+    if errorlevel 1 (
+        pause
+        exit /b 1
+    )
+    call :check_runtime
+    if errorlevel 1 (
+        pause
+        exit /b 1
+    )
 )
 
 echo.
@@ -419,3 +434,15 @@ echo Reinstall/update the service or restart the standalone strategy to apply th
 pause
 exit /b 0
 
+
+
+:install_runtime
+echo.
+echo Installing official Zapret 2 runtime files...
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%ROOT%utils\install-runtime.ps1"
+if errorlevel 1 (
+    echo [ERROR] Runtime installation failed.
+    exit /b 1
+)
+echo [OK] Runtime files downloaded and verified.
+exit /b 0

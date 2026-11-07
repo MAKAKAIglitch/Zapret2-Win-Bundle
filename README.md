@@ -58,7 +58,7 @@ The service menu cycles the optional IPSet inclusion blocks used by General, Gen
 
 Run service.bat as administrator. It manages the dedicated Zapret2WinBundle service. Stop/remove operations target only that service. Strategy BAT files can also be run directly.
 
-The upstream Zapret 2 Windows bundle leaves its service creation example commented out and warns that service mode requires manual configuration. Therefore this project's service mode remains experimental until tested on the target Windows installation.
+The upstream Zapret 2 Windows bundle leaves its service creation example commented out and warns that service mode requires manual configuration. This project's service mode is therefore marked experimental. Runtime download and hash verification are automated, but actual WinDivert driver loading and service startup must still be tested on the target Windows PC.
 
 ## Upstream
 

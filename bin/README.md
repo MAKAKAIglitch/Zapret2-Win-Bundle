@@ -1,13 +1,19 @@
 # Runtime files
 
-This folder receives the Windows runtime from the pinned upstream bundle.
+This directory is populated automatically by the root-level INSTALL.bat.
 
-Preferred setup:
-- Run SETUP_RUNTIME.bat from the repository root, or choose option 8 in service.bat.
-- The installer downloads a pinned commit from https://github.com/bol-van/zapret-win-bundle.
-- It extracts only the upstream zapret-winws folder and verifies the expected winws2.exe, WinDivert, Lua and filter files before copying them here.
-- Existing runtime contents are backed up under data/runtime-backup when the user confirms an update.
+Run INSTALL.bat to download the required Zapret 2 runtime files from the official bol-van/zapret-win-bundle repository. The installer is pinned to a specific upstream commit and checks every downloaded file against its Git blob SHA-1 before moving it into this directory.
 
-Manual setup is also possible: copy the contents of the upstream zapret-winws directory into this bin directory. Do not create an extra nested zapret-winws directory.
+The expected layout includes:
 
-Keep winws2.exe and all Lua files from the same upstream bundle revision. Zapret 2 checks the Lua compatibility version.
+- winws2.exe
+- WinDivert.dll
+- WinDivert64.sys
+- cygwin1.dll
+- lua/zapret-lib.lua
+- lua/zapret-antidpi.lua
+- lua/zapret-auto.lua
+- files/quic_initial_www_google_com.bin
+- windivert.filter/ with the filters used by the profiles
+
+Runtime files are local and excluded from Git. UPSTREAM-VERSION.txt records the exact upstream commit installed on this PC.
