@@ -287,7 +287,7 @@ if "!MISSING!"=="0" (
     exit /b 0
 )
 echo Missing files: !MISSING!
-echo Copy the contents of upstream zapret-winws into this repository's bin folder.
+echo Run SETUP_RUNTIME.bat from the repository root to download and verify the official runtime.
 exit /b 1
 
 

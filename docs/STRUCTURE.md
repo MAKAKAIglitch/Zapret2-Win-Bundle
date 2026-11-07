@@ -10,7 +10,7 @@ Root:
 Folders:
 - bin/ — local upstream runtime; excluded from Git.
 - lists/ — copied domain and IP-set lists plus user-editable lists.
-- utils/ — helper scripts used by root-level profiles, including setup-runtime.ps1.
+- utils/ — helper scripts used by root-level profiles, including install-runtime.ps1.
 - data/ — local selected profile and IPSet mode state; selected-profile.txt and ipset-mode.txt are ignored by Git.
 - docs/ — project documentation.
 
