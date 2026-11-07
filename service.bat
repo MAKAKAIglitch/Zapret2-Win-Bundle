@@ -6,6 +6,8 @@ set "ROOT=%~dp0"
 set "BIN=%ROOT%bin"
 set "LISTS=%ROOT%lists"
 set "STATE=%ROOT%data\selected-profile.txt"
+set "IPSET_STATE=%ROOT%data\ipset-mode.txt"
+set "IPSET_MODE=any"
 set "ENGINE=%BIN%\winws2.exe"
 set "SERVICE_NAME=Zapret2WinBundle"
 set "SERVICE_DISPLAY=Zapret 2 Win Bundle"
@@ -24,6 +26,7 @@ if /i not "%~1"=="--admin" (
 )
 
 :menu
+call :load_ipset_mode
 call :load_profile
 call :service_state
 cls
@@ -38,6 +41,7 @@ echo.
 echo    Service:    %SERVICE_NAME%
 echo    Status:     !SERVICE_STATUS!
 echo    Profile:    !PROFILE_TITLE!
+echo    IPSet mode: !IPSET_MODE!
 echo.
 echo  ------------------------------------------------------------
 echo    1. Select strategy
@@ -46,7 +50,8 @@ echo    3. Start service
 echo    4. Stop service
 echo    5. Remove service
 echo    6. Check runtime and lists
-echo.
+    echo    7. Change IPSet mode
+ echo.
 echo    0. Exit
 echo  ------------------------------------------------------------
 echo.
@@ -76,6 +81,10 @@ if "!CHOICE!"=="5" (
 if "!CHOICE!"=="6" (
     call :check_runtime
     pause
+    goto menu
+)
+if "!CHOICE!"=="7" (
+    call :ipset_switch
     goto menu
 )
 if "!CHOICE!"=="0" exit /b 0
@@ -211,7 +220,7 @@ if "!PROFILE_NEEDS_LISTS!"=="1" (
     )
 )
 
-if "!PROFILE_NEEDS_IPSET!"=="1" (
+if "!PROFILE_NEEDS_IPSET!"=="1" if /i "!IPSET_MODE!"=="loaded" (
     if not exist "%LISTS%\ipset-all.txt" (
         echo [MISSING] lists\ipset-all.txt
         set /a MISSING+=1
@@ -345,3 +354,32 @@ sc.exe delete "%SERVICE_NAME%"
 echo.
 pause
 exit /b 0
+
+:load_ipset_mode
+set "IPSET_MODE=any"
+if exist "%IPSET_STATE%" set /p "IPSET_MODE="<"%IPSET_STATE%"
+if /i not "%IPSET_MODE%"=="any" if /i not "%IPSET_MODE%"=="loaded" if /i not "%IPSET_MODE%"=="none" set "IPSET_MODE=any"
+exit /b 0
+
+
+:ipset_switch
+call :load_ipset_mode
+if /i "%IPSET_MODE%"=="any" (
+    set "IPSET_MODE=loaded"
+) else if /i "%IPSET_MODE%"=="loaded" (
+    set "IPSET_MODE=none"
+) else (
+    set "IPSET_MODE=any"
+)
+if not exist "%ROOT%data" mkdir "%ROOT%data" >nul 2>&1
+> "%IPSET_STATE%" echo %IPSET_MODE%
+echo.
+echo IPSet mode changed to: %IPSET_MODE%
+if /i "%IPSET_MODE%"=="any" echo ANY: IP-set inclusion is disabled; matching rules apply to all eligible remote addresses.
+if /i "%IPSET_MODE%"=="loaded" echo LOADED: matching rules use lists\ipset-all.txt.
+if /i "%IPSET_MODE%"=="none" echo NONE: IP-set-specific strategy blocks are skipped; domain strategies remain active.
+echo.
+echo Reinstall/update the service or restart the standalone strategy to apply the new mode.
+pause
+exit /b 0
+

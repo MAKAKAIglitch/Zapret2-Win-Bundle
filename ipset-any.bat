@@ -4,7 +4,7 @@ set "PROFILE_TITLE=IPSet ANY"
 set "PROFILE_DESCRIPTION=IP-set matching with all payload types, including unknown payloads."
 set "PROFILE_NEEDS_AUTO_LUA=0"
 set "PROFILE_NEEDS_LISTS=1"
-set "PROFILE_NEEDS_IPSET=1"
+set "PROFILE_NEEDS_IPSET=0"
 set "PROFILE_ARGS=--wf-tcp-empty=1 --wf-tcp-in=80,443,500,1701,2408,4500,8095 --wf-tcp-out=80,443,500,1701,2408,4500,8095 --wf-udp-in=443,500,1701,2408,4500,8095 --wf-udp-out=443,500,1701,2408,4500,8095"
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-init=@"%ROOT%bin\lua\zapret-lib.lua"
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-init=@"%ROOT%bin\lua\zapret-antidpi.lua"
@@ -14,11 +14,11 @@ set PROFILE_ARGS=%PROFILE_ARGS% --wf-raw-part=@"%ROOT%bin\windivert.filter\windi
 set PROFILE_ARGS=%PROFILE_ARGS% --wf-raw-part=@"%ROOT%bin\windivert.filter\windivert_part.wireguard.txt"
 set PROFILE_ARGS=%PROFILE_ARGS% --wf-raw-part=@"%ROOT%bin\windivert.filter\windivert_part.quic_initial_ietf.txt"
 
-set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=80,443 --ipset="%ROOT%lists\ipset-all.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=all
+set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=80,443 --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=all
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=2:ip_autottl=-2,3-20:ip6_autottl=-2,3-20
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 
-set PROFILE_ARGS=%PROFILE_ARGS% --filter-udp=443 --ipset="%ROOT%lists\ipset-all.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=all
+set PROFILE_ARGS=%PROFILE_ARGS% --filter-udp=443 --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=all
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=2:ip_autottl=-2,3-20:ip6_autottl=-2,3-20
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 

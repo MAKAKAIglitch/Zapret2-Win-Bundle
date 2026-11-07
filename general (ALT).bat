@@ -1,5 +1,10 @@
 @echo off
 set "ROOT=%~dp0"
+set "IPSET_MODE=any"
+if exist "%ROOT%data\ipset-mode.txt" set /p "IPSET_MODE="<"%ROOT%data\ipset-mode.txt"
+if /i not "%IPSET_MODE%"=="any" if /i not "%IPSET_MODE%"=="loaded" if /i not "%IPSET_MODE%"=="none" set "IPSET_MODE=any"
+set "IPSET_INCLUDE="
+if /i "%IPSET_MODE%"=="loaded" set IPSET_INCLUDE=--ipset="%ROOT%lists\ipset-all.txt"
 set "PROFILE_TITLE=General ALT"
 set "PROFILE_DESCRIPTION=Alternative TLS variant with randomized SNI handling and the same port coverage."
 set "PROFILE_NEEDS_AUTO_LUA=0"
@@ -15,25 +20,25 @@ set PROFILE_ARGS=%PROFILE_ARGS% --wf-raw-part=@"%ROOT%bin\windivert.filter\windi
 set PROFILE_ARGS=%PROFILE_ARGS% --wf-raw-part=@"%ROOT%bin\windivert.filter\windivert_part.wireguard.txt"
 set PROFILE_ARGS=%PROFILE_ARGS% --wf-raw-part=@"%ROOT%bin\windivert.filter\windivert_part.quic_initial_ietf.txt"
 
-set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=80 --filter-l7=http --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-all.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=http_req
+set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=80 --filter-l7=http --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=http_req
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=fake_default_http:payload=http_req:ip_autottl=-2,3-20:ip6_autottl=-2,3-20
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fakedsplit:payload=http_req:ip_autottl=-2,3-20:ip6_autottl=-2,3-20
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 
-set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=443 --filter-l7=tls --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist="%ROOT%lists\list-google.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-all.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=tls_client_hello
+set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=443 --filter-l7=tls --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist="%ROOT%lists\list-google.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=tls_client_hello
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=fake_default_tls:payload=tls_client_hello:repeats=11:tls_mod=rnd,rndsni,dupsid,sni=www.google.com
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=multidisorder:payload=tls_client_hello:pos=1,midsld
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 
-set PROFILE_ARGS=%PROFILE_ARGS% --filter-udp=443 --filter-l7=quic --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist="%ROOT%lists\list-google.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-all.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=quic_initial
+set PROFILE_ARGS=%PROFILE_ARGS% --filter-udp=443 --filter-l7=quic --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist="%ROOT%lists\list-google.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=quic_initial
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=quic_google:payload=quic_initial:repeats=8
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 
-set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=80,443 --ipset="%ROOT%lists\ipset-all.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=all
+if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=80,443 %IPSET_INCLUDE% --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=all
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=2:ip_autottl=-2,3-20:ip6_autottl=-2,3-20
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 
-set PROFILE_ARGS=%PROFILE_ARGS% --filter-udp=443 --ipset="%ROOT%lists\ipset-all.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=all
+if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --filter-udp=443 %IPSET_INCLUDE% --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=all
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=2:ip_autottl=-2,3-20:ip6_autottl=-2,3-20
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 
