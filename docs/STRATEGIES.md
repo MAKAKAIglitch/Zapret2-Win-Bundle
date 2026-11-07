@@ -21,6 +21,8 @@ The service selector discovers root-level BAT files that export PROFILE_ARGS. Cu
 | `general-window.bat` | WSSIZE + multisplit | Experimental; can reduce throughput |
 | `general-syndata.bat` | syndata + baseline | Experimental SYN-data injection |
 | `general-quic-default.bat` | Built-in default QUIC fake | Alternative QUIC fake source |
+| `general-http-case.bat` | http_domcase + http_hostcase | HTTP-only header/domain case changes |
+| `general-http-unixeol.bat` | http_unixeol | HTTP-only line-ending transformation |
 | `ipset-any.bat` | All-port automatic profile, no IPSet include | Captures local TCP/UDP 1–65535 |
 | `ipset-loaded-auto.bat` | All-port automatic profile, loaded IPSet only | Uses `lists/ipset-all.txt` |
 
@@ -33,7 +35,7 @@ Each profile exports `PROFILE_TITLE` and `PROFILE_ARGS` when called with `--prof
 3. Test the same blocked domains/services and the same protocol each time.
 4. Keep the profile that works reliably; a larger number of desync actions does not automatically mean better speed or compatibility.
 
-The profiles are deliberately different algorithms, not merely copies with changed names. Fake-only is a useful control. Fakedsplit combines fake traffic with split segments. Multisplit and multidisorder are alternatives without fake packets. FakedDisorder combines fake segments with reverse-order delivery. Legacy disorder exists to compare the older algorithm. HostFakeSplit, WSSIZE and SynData are marked experimental. QUIC Default Fake changes only the QUIC fake source.
+The profiles are deliberately different algorithms, not merely copies with changed names. Fake-only is a useful control. Fakedsplit combines fake traffic with split segments. Multisplit and multidisorder are alternatives without fake packets. FakedDisorder combines fake segments with reverse-order delivery. Legacy disorder exists to compare the older algorithm. HostFakeSplit, WSSIZE and SynData are marked experimental. QUIC Default Fake changes only the QUIC fake source. HTTP Header Case and HTTP Unix EOL are limited to cleartext HTTP requests; they do not change HTTPS/TLS traffic.
 
 ## Requested ports
 
