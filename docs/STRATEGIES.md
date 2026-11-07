@@ -24,7 +24,7 @@ The service menu cycles the optional IPSet blocks in General, General ALT and Ge
 
 - **ANY** (default): no `--ipset` include filter; IPSet rules apply to all eligible remote addresses, subject to exclusion lists.
 - **LOADED**: include only addresses/subnets from `lists/ipset-all.txt`.
-- **NONE**: skip IPSet-only profile blocks; domain hostlists and the five additional ports remain active.
+- **NONE**: skip the broad IPSet-only include blocks; domain hostlists and the five additional ports remain active. Reserved/private IP exclusion lists remain attached to the domain rules.
 
 Zapret 2 does not accept a zero-byte file as an ordinary include IPSet. ANY is correctly represented by omitting the `--ipset` parameter. The dedicated `ipset-any.bat` and `ipset-loaded-auto.bat` profiles have fixed ANY/LOADED behavior independent of this service setting.
 
