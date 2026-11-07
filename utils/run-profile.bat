@@ -61,11 +61,42 @@ if "!PROFILE_NEEDS_LISTS!"=="1" (
     )
 )
 
-if "!PROFILE_NEEDS_IPSET!"=="1" (
-    for %%F in (ipset-all.txt ipset-exclude.txt ipset-exclude-user.txt) do (
+if "!PROFILE_NEEDS_IPSET_ALWAYS!"=="1" (
+    for %%F in (ipset-exclude.txt ipset-exclude-user.txt) do (
         if not exist "%ROOT%lists\%%F" (
             echo [MISSING] lists\%%F
             set /a MISSING+=1
+        )
+    )
+    if not exist "%ROOT%lists\ipset-all.txt" (
+        echo [MISSING] lists\ipset-all.txt
+        set /a MISSING+=1
+    ) else (
+        for %%I in ("%ROOT%lists\ipset-all.txt") do (
+            if %%~zI LSS 1024 (
+                echo [INVALID] lists\ipset-all.txt is only %%~zI bytes; the full IP set is required.
+                set /a MISSING+=1
+            )
+        )
+    )
+) else if "!PROFILE_NEEDS_IPSET!"=="1" (
+    for %%F in (ipset-exclude.txt ipset-exclude-user.txt) do (
+        if not exist "%ROOT%lists\%%F" (
+            echo [MISSING] lists\%%F
+            set /a MISSING+=1
+        )
+    )
+    if /i "!IPSET_MODE!"=="loaded" (
+        if not exist "%ROOT%lists\ipset-all.txt" (
+            echo [MISSING] lists\ipset-all.txt
+            set /a MISSING+=1
+        ) else (
+            for %%I in ("%ROOT%lists\ipset-all.txt") do (
+                if %%~zI LSS 1024 (
+                    echo [INVALID] lists\ipset-all.txt is only %%~zI bytes; the full IP set is required.
+                    set /a MISSING+=1
+                )
+            )
         )
     )
 )
