@@ -8,7 +8,10 @@ set "ENGINE=%BIN_DIR%\winws2.exe"
 set "STRATEGY_DIR=%ROOT%strategies"
 set "SERVICE_NAME=Zapret2WinBundle"
 set "SERVICE_DISPLAY=Zapret 2 Win Bundle"
+set "PROFILE_STATE=%ROOT%data\selected-profile.txt"
 set "SELECTED_PROFILE=general.strategy.cmd"
+if exist "%PROFILE_STATE%" set /p "SELECTED_PROFILE="<"%PROFILE_STATE%"
+if not exist "%STRATEGY_DIR%\%SELECTED_PROFILE%" set "SELECTED_PROFILE=general.strategy.cmd"
 
 rem The service manager needs elevated rights for Windows service operations.
 if /i not "%~1"=="--elevated" (
@@ -34,7 +37,7 @@ echo  ==================================================
 echo.
 echo    Служба:        %SERVICE_NAME%
 echo    Статус:        !SERVICE_STATE!
-echo    Стратегия:     !PROFILE_TITLE!
+echo    Для установки: !PROFILE_TITLE!
 echo.
 echo  --------------------------------------------------
 echo    1. Выбрать стратегию
@@ -158,6 +161,8 @@ if not defined NEW_PROFILE (
 )
 
 set "SELECTED_PROFILE=!NEW_PROFILE!"
+if not exist "%ROOT%data" mkdir "%ROOT%data" >nul 2>&1
+> "%PROFILE_STATE%" echo !SELECTED_PROFILE!
 call :load_profile
 echo.
 echo Выбрана стратегия: !PROFILE_TITLE!
