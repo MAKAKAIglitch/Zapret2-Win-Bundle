@@ -25,6 +25,18 @@ if /i not "%~1"=="--admin" (
     )
 )
 
+
+if not exist "%ENGINE%" (
+    echo.
+    echo Zapret 2 runtime is not installed yet.
+    set "FIRST_SETUP="
+    set /p "FIRST_SETUP=Download and verify the official runtime now? [Y/N]: "
+    if /i "!FIRST_SETUP!"=="Y" (
+        call :install_runtime
+        if errorlevel 1 echo Runtime setup did not complete. Use menu option 8 to retry.
+    )
+)
+
 :menu
 call :load_ipset_mode
 call :load_profile
