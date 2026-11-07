@@ -23,6 +23,7 @@ set PROFILE_ARGS=%PROFILE_ARGS% --in-range=a
 
 set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=80 --filter-l7=http --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=http_req
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=circular:fails=3:time=120:retrans=2:maxseq=16384:inseq=4096
+set PROFILE_ARGS=%PROFILE_ARGS% --in-range=x
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=fake_default_http:payload=http_req:ip_autottl=-2,3-20:ip6_autottl=-2,3-20:strategy=1
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fakedsplit:payload=http_req:ip_autottl=-2,3-20:ip6_autottl=-2,3-20:strategy=2
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=multisplit:pos=2:payload=http_req:strategy=3:final
@@ -30,6 +31,7 @@ set PROFILE_ARGS=%PROFILE_ARGS% --new --in-range=a
 
 set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=443 --filter-l7=tls --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist="%ROOT%lists\list-google.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=tls_client_hello
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=circular:fails=3:time=120:retrans=2:maxseq=16384:inseq=4096
+set PROFILE_ARGS=%PROFILE_ARGS% --in-range=x
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=fake_default_tls:payload=tls_client_hello:repeats=8:tls_mod=rnd,dupsid,sni=www.google.com:strategy=1
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=multidisorder:payload=tls_client_hello:pos=1,midsld:strategy=2
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=multisplit:payload=tls_client_hello:pos=midsld:strategy=3:final
@@ -37,6 +39,7 @@ set PROFILE_ARGS=%PROFILE_ARGS% --new --in-range=a
 
 set PROFILE_ARGS=%PROFILE_ARGS% --filter-udp=443 --filter-l7=quic --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist="%ROOT%lists\list-google.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=quic_initial
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=circular:fails=3:time=120:udp_out=4:udp_in=1
+set PROFILE_ARGS=%PROFILE_ARGS% --in-range=x
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=quic_google:payload=quic_initial:repeats=8:strategy=1
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=fake_default_quic:payload=quic_initial:repeats=6:strategy=2
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=quic_google:payload=quic_initial:repeats=12:strategy=3:final
@@ -44,6 +47,7 @@ set PROFILE_ARGS=%PROFILE_ARGS% --new --in-range=a
 
 if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=80,443 %IPSET_INCLUDE% --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=all
 if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=circular:fails=3:time=120:retrans=2:maxseq=16384:inseq=4096
+set PROFILE_ARGS=%PROFILE_ARGS% --in-range=x
 if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=1:ip_autottl=-2,3-20:ip6_autottl=-2,3-20:strategy=1
 if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fakedsplit:payload=all:strategy=2
 if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=multisplit:pos=2:payload=all:strategy=3:final
@@ -51,6 +55,7 @@ set PROFILE_ARGS=%PROFILE_ARGS% --new --in-range=a
 
 if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --filter-udp=443 %IPSET_INCLUDE% --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=all
 if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=circular:fails=3:time=120:udp_out=4:udp_in=1
+set PROFILE_ARGS=%PROFILE_ARGS% --in-range=x
 if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=1:ip_autottl=-2,3-20:ip6_autottl=-2,3-20:strategy=1
 if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x0000000000000000000000000000000000000000000000000000000000000000:payload=all:repeats=2:ip_autottl=-2,3-20:ip6_autottl=-2,3-20:strategy=2
 if /i not "%IPSET_MODE%"=="none" set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=4:ip_autottl=-2,3-20:ip6_autottl=-2,3-20:strategy=3:final
@@ -58,6 +63,7 @@ set PROFILE_ARGS=%PROFILE_ARGS% --new --in-range=a
 
 set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=500,1701,2408,4500,8095 --payload=all
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=circular:fails=3:time=120:retrans=2:maxseq=4096:inseq=1024
+set PROFILE_ARGS=%PROFILE_ARGS% --in-range=x
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=1:ip_autottl=-2,3-20:ip6_autottl=-2,3-20:strategy=1
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x0000000000000000000000000000000000000000000000000000000000000000:payload=all:repeats=2:ip_autottl=-2,3-20:ip6_autottl=-2,3-20:strategy=2
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=4:ip_autottl=-2,3-20:ip6_autottl=-2,3-20:strategy=3:final
@@ -65,6 +71,7 @@ set PROFILE_ARGS=%PROFILE_ARGS% --new --in-range=a
 
 set PROFILE_ARGS=%PROFILE_ARGS% --filter-udp=500,1701,2408,4500,8095 --payload=all
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=circular:fails=3:time=120:udp_out=4:udp_in=1
+set PROFILE_ARGS=%PROFILE_ARGS% --in-range=x
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=1:ip_autottl=-2,3-20:ip6_autottl=-2,3-20:strategy=1
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x0000000000000000000000000000000000000000000000000000000000000000:payload=all:repeats=2:ip_autottl=-2,3-20:ip6_autottl=-2,3-20:strategy=2
 set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fake:blob=0x00000000000000000000000000000000:payload=all:repeats=4:ip_autottl=-2,3-20:ip6_autottl=-2,3-20:strategy=3:final
