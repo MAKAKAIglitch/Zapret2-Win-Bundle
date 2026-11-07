@@ -6,7 +6,7 @@ A Windows BAT-based bundle manager for Zapret 2. The service manager and strateg
 
 - service.bat — service manager and strategy selector
 - SETUP_RUNTIME.bat — downloads and verifies the pinned upstream Windows runtime
-- general.bat, general (ALT).bat, general (AUTO).bat, ipset-any.bat, ipset-loaded-auto.bat — root-level strategies
+- general*.bat, ipset-any.bat, ipset-loaded-auto.bat — root-level strategy profiles (12 selectable profiles)
 - bin/ — upstream Windows runtime (not committed)
 - lists/ — domain lists and IP sets
 - utils/ — helper BAT files
@@ -24,9 +24,18 @@ The installer does not execute the downloaded binaries. The selected upstream co
 
 ## Strategies
 
-- General — static HTTP/TLS/QUIC rules, IP-set rules, and the requested ports.
-- General ALT — alternative TLS initialization.
-- General AUTO — automatic per-host strategy rotation using zapret-auto.lua.
+The selector now offers 12 root-level profiles:
+
+- General — balanced static HTTP/TLS/QUIC profile.
+- General ALT — alternate TLS fingerprint/SNI handling.
+- General AUTO — adaptive per-host rotation using zapret-auto.lua.
+- General Fake only — minimal fake-only baseline.
+- General FakeDSplit — fake plus forged split segments.
+- General MultiSplit — TCP segmentation without fake packets.
+- General MultiDisorder — TCP segments sent in reverse order.
+- General HostFakeSplit — host-focused fake/split method; experimental.
+- General Legacy MultiDisorder — legacy disorder algorithm for comparison.
+- General Window (WSSIZE) — small TCP receive window plus multisplit; experimental and potentially slower.
 - IPSet ANY AUTO — automatic rotation for all local TCP/UDP ports (1–65535), with no include IP-set restriction.
 - IPSet LOADED AUTO — the same all-port automatic profile, restricted to the 33,336-entry lists/ipset-all.txt.
 
@@ -34,7 +43,7 @@ The automatic profiles use Zapret 2's upstream circular orchestrator. It rotates
 
 ## Requested ports
 
-General, General ALT and General AUTO intercept TCP and UDP ports 500, 1701, 2408, 4500 and 8095 in both directions. These profiles include payload=all rules for the five ports.
+All General-family profiles intercept TCP and UDP ports 500, 1701, 2408, 4500 and 8095 in both directions. Their rules include payload=all for these five ports.
 
 The two IPSet AUTO profiles are broader: they capture TCP and UDP ports 1–65535 in both directions. ANY omits the IP-set include filter and applies to all eligible remote addresses; LOADED selects addresses using lists/ipset-all.txt. They are not limited to the five additional ports.
 
