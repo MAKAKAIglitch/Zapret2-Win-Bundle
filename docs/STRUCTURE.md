@@ -10,7 +10,7 @@ Folders:
 - bin/ — local upstream runtime; excluded from Git.
 - lists/ — copied domain and IP-set lists plus user-editable lists.
 - utils/ — helper scripts used by root-level profiles.
-- data/ — local selected profile state; selected-profile.txt is ignored by Git.
+- data/ — local selected profile and IPSet mode state; selected-profile.txt and ipset-mode.txt are ignored by Git.
 - docs/ — project documentation.
 
 Strategy BAT files export PROFILE_TITLE and PROFILE_ARGS when called with --profile. service.bat discovers them by scanning root-level BAT files, excluding itself.
