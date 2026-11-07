@@ -30,7 +30,7 @@ Each profile exports `PROFILE_TITLE` and `PROFILE_ARGS` when called with `--prof
 3. Test the same blocked domains/services and the same protocol each time.
 4. Keep the profile that works reliably; a larger number of desync actions does not automatically mean better speed or compatibility.
 
-The profiles are deliberately different algorithms, not merely copies with changed names. Fake-only is a useful control. Fakedsplit combines fake traffic with split segments. Multisplit and multidisorder are alternatives without fake packets. Legacy disorder exists to compare the older algorithm. HostFakeSplit and WSSIZE are marked experimental.
+The profiles are deliberately different algorithms, not merely copies with changed names. Fake-only is a useful control. Fakedsplit combines fake traffic with split segments. Multisplit and multidisorder are alternatives without fake packets. FakedDisorder combines fake segments with reverse-order delivery. Legacy disorder exists to compare the older algorithm. HostFakeSplit, WSSIZE and SynData are marked experimental. QUIC Default Fake changes only the QUIC fake source.
 
 ## Requested ports
 
