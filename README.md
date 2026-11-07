@@ -24,21 +24,19 @@ A Windows BAT-based bundle manager for Zapret 2. The service manager and strateg
 - General — static HTTP/TLS/QUIC rules, IP-set rules, and the requested ports.
 - General ALT — alternative TLS initialization.
 - General AUTO — automatic per-host strategy rotation using zapret-auto.lua.
-- IPSet ANY — IP-set matching and Lua handling for all payload types.
+- IPSet ANY AUTO — automatic per-host rotation for all TCP/UDP ports matched by ipset-all.txt, with payload=all.
 
-The automatic profile uses the upstream circular orchestrator. It rotates among strategy variants when connection failure feedback is detected. This is feedback-based automation, not an external connectivity test, and cannot guarantee the best strategy on every network.
+The automatic profiles use the upstream circular orchestrator. It rotates among strategy variants when connection failure feedback is detected. This is feedback-based automation, not an external connectivity test, and cannot guarantee the best strategy on every network.
 
 ## Requested ports
 
-All five ports are intercepted in both directions for TCP and UDP:
+General, General ALT and General AUTO intercept TCP and UDP ports 500, 1701, 2408, 4500 and 8095 in both directions. These profiles include payload=all rules for the five ports.
 
-- 500
-- 1701
-- 2408
-- 4500
-- 8095
+IPSet ANY AUTO is broader: it captures TCP and UDP ports 1-65535 in both directions, then selects addresses using lists/ipset-all.txt. It is not limited to the five additional ports.
 
-The profiles use --payload=all and explicitly pass payload=all to Lua desync actions. --wf-tcp-empty=1 additionally captures empty TCP packets for the selected TCP ports and can increase CPU overhead.
+The inbound filters provide connection feedback; the Lua desync actions principally affect outgoing packets. Windows WinDivert does not correctly intercept forwarded traffic behind Windows NAT; this bundle is intended for traffic to/from the local PC.
+
+The profiles enable --wf-tcp-empty=1. Capturing empty TCP ACK packets improves packet-counter feedback but can increase CPU usage, particularly with all-port capture.
 
 ## Lists
 
