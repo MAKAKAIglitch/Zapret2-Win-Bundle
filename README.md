@@ -16,11 +16,11 @@ A Windows BAT-based bundle manager for Zapret 2. The service manager and strateg
 ## Prepare runtime
 
 1. Run SETUP_RUNTIME.bat (or choose option 8 in service.bat).
-2. The installer downloads a pinned commit of the official [bol-van/zapret-win-bundle](https://github.com/bol-van/zapret-win-bundle), extracts only zapret-winws, and verifies the required Zapret 2, Lua and WinDivert files before copying them into bin.
+2. The installer downloads the required files from the official [bol-van/zapret-win-bundle](https://github.com/bol-van/zapret-win-bundle) at a pinned commit and verifies each file's Git blob SHA-1 before installing it.
 3. When an older runtime is already present, the installer asks for UPDATE and backs up the previous bin contents under data/runtime-backup/.
 4. Run service.bat and choose option 6 to check the runtime and lists.
 
-The installer does not execute the downloaded binaries. The selected upstream commit is recorded in bin/runtime-version.txt.
+The installer does not execute the downloaded binaries. The selected upstream commit is recorded in bin/UPSTREAM-VERSION.txt.
 
 ## Strategies
 

@@ -1,10 +1,10 @@
 # Runtime files
 
-This directory is populated automatically by the root-level INSTALL.bat.
+Run SETUP_RUNTIME.bat to download the required Zapret 2 runtime files from the official bol-van/zapret-win-bundle repository.
 
-Run INSTALL.bat to download the required Zapret 2 runtime files from the official bol-van/zapret-win-bundle repository. The installer is pinned to a specific upstream commit and checks every downloaded file against its Git blob SHA-1 before moving it into this directory.
+The installer is pinned to one upstream commit. It downloads the required files to a temporary staging directory, verifies every Git blob SHA-1, backs up an existing local runtime to data/runtime-backup, and only then replaces the files in bin.
 
-The expected layout includes:
+Expected files include:
 
 - winws2.exe
 - WinDivert.dll

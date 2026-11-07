@@ -116,7 +116,7 @@ for %%F in (discord_media stun wireguard quic_initial_ietf) do (
 if not "!MISSING!"=="0" (
     echo.
     echo Missing required files: !MISSING!
-    echo Copy the contents of upstream zapret-winws into this repository's bin folder.
+    echo Run SETUP_RUNTIME.bat from the repository root to download and verify the official runtime.
     pause
     exit /b 1
 )

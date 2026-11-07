@@ -7,7 +7,7 @@ The runtime is downloaded on the user's PC from the official repository:
 - Upstream commit date: 2026-11-05
 - Runtime directory: bin/
 
-INSTALL.bat calls utils/install-runtime.ps1. The installer uses commit-pinned raw.githubusercontent.com URLs and verifies each downloaded file against its Git blob SHA-1 before moving it into bin/.
+SETUP_RUNTIME.bat calls utils/install-runtime.ps1. The installer uses commit-pinned raw.githubusercontent.com URLs and verifies each downloaded file against its Git blob SHA-1 before moving it into bin/. The complete runtime is staged and verified first; an existing runtime is backed up under data/runtime-backup/ before files are replaced.
 
 This confirms exact correspondence with the pinned GitHub commit. It is not a security audit of upstream software.
 

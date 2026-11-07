@@ -1,5 +1,5 @@
-# Zapret2-Win-Bundle runtime bootstrapper
-# Downloads required files from a pinned official upstream commit and verifies Git blob IDs.
+# Downloads the required x64 runtime from an exact upstream commit.
+# Every file is validated as a Git blob before any runtime file is replaced.
 
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
@@ -41,7 +41,6 @@ function Get-GitBlobSha1 {
     finally {
         $Sha.Dispose()
     }
-
     return ([System.BitConverter]::ToString($HashBytes)).Replace('-', '').ToLowerInvariant()
 }
 
@@ -49,24 +48,41 @@ $TempRoot = $null
 try {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-    Write-Host ''
-    Write-Host 'Zapret 2 Win Bundle - official runtime installer' -ForegroundColor Cyan
-    Write-Host "Source commit: $UpstreamCommit"
-    Write-Host 'Each file will be checked against its pinned GitHub Git-blob hash.'
-    Write-Host ''
+    $Running = Get-Process -Name 'winws2' -ErrorAction SilentlyContinue
+    if ($Running) {
+        throw 'winws2.exe is running. Stop the Zapret2WinBundle service or standalone profile before updating runtime files.'
+    }
+
+    $ExistingItems = @()
+    if (Test-Path -LiteralPath $RuntimeRoot) {
+        $ExistingItems = @(Get-ChildItem -LiteralPath $RuntimeRoot -Force | Where-Object { $_.Name -ne 'README.md' })
+    }
+
+    if ($ExistingItems.Count -gt 0) {
+        Write-Host ''
+        Write-Host 'An existing runtime was found in bin.'
+        Write-Host 'It will be backed up under data\runtime-backup before replacement.'
+        $Answer = Read-Host 'Type UPDATE to continue'
+        if ($Answer -cne 'UPDATE') {
+            Write-Host 'Update cancelled. The current runtime has not been changed.'
+            exit 2
+        }
+    }
 
     $TempRoot = Join-Path $env:TEMP ('Zapret2-Win-Bundle-' + [Guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Path $TempRoot -Force | Out-Null
     New-Item -ItemType Directory -Path $RuntimeRoot -Force | Out-Null
 
+    Write-Host ''
+    Write-Host 'Zapret 2 Win Bundle - official runtime installer' -ForegroundColor Cyan
+    Write-Host "Pinned upstream commit: $UpstreamCommit"
+    Write-Host 'Downloading and verifying every required file before installation.'
+    Write-Host ''
+
+    # Stage and verify the complete set first. A network/hash failure cannot leave a mixed runtime.
     $Index = 0
     foreach ($Item in $Files) {
         $Index++
-        $RelativeDestination = $Item.Destination -replace '/', [System.IO.Path]::DirectorySeparatorChar
-        $Destination = Join-Path $RuntimeRoot $RelativeDestination
-        $DestinationDirectory = Split-Path -Parent $Destination
-        New-Item -ItemType Directory -Path $DestinationDirectory -Force | Out-Null
-
         $TempFile = Join-Path $TempRoot ($Index.ToString('00') + '.download')
         $Uri = $UpstreamBase + $Item.Source
 
@@ -78,28 +94,48 @@ try {
             throw ("Hash mismatch for {0}. Expected {1}, received {2}." -f $Item.Source, $Item.GitBlob, $ActualGitBlob)
         }
 
-        Move-Item -LiteralPath $TempFile -Destination $Destination -Force
         Write-Host ('    verified {0}' -f $ActualGitBlob) -ForegroundColor Green
+    }
+
+    # Preserve the previous local runtime before replacing any files.
+    if ($ExistingItems.Count -gt 0) {
+        $DataRoot = Join-Path $RepoRoot 'data'
+        New-Item -ItemType Directory -Path $DataRoot -Force | Out-Null
+        $BackupName = 'runtime-backup-' + (Get-Date -Format 'yyyyMMdd-HHmmss')
+        $BackupRoot = Join-Path $DataRoot $BackupName
+        New-Item -ItemType Directory -Path $BackupRoot -Force | Out-Null
+        foreach ($Item in $ExistingItems) {
+            Copy-Item -LiteralPath $Item.FullName -Destination $BackupRoot -Recurse -Force
+        }
+        Write-Host "Previous runtime backed up to data\$BackupName"
+    }
+
+    $Index = 0
+    foreach ($Item in $Files) {
+        $Index++
+        $RelativeDestination = $Item.Destination -replace '/', [System.IO.Path]::DirectorySeparatorChar
+        $Destination = Join-Path $RuntimeRoot $RelativeDestination
+        $DestinationDirectory = Split-Path -Parent $Destination
+        New-Item -ItemType Directory -Path $DestinationDirectory -Force | Out-Null
+        Move-Item -LiteralPath (Join-Path $TempRoot ($Index.ToString('00') + '.download')) -Destination $Destination -Force
     }
 
     $VersionText = @(
         'Zapret 2 Windows runtime'
         'Upstream repository: https://github.com/bol-van/zapret-win-bundle'
         ('Pinned commit: ' + $UpstreamCommit)
-        'Every installed file passed its GitHub Git-blob SHA-1 check.'
+        'All installed files passed Git blob SHA-1 validation.'
         ('Installed UTC: ' + [DateTime]::UtcNow.ToString('yyyy-MM-ddTHH:mm:ssZ'))
     ) -join [Environment]::NewLine
     [System.IO.File]::WriteAllText((Join-Path $RuntimeRoot 'UPSTREAM-VERSION.txt'), $VersionText, [System.Text.Encoding]::ASCII)
 
     Write-Host ''
     Write-Host 'Runtime installed and verified successfully.' -ForegroundColor Green
-    Write-Host 'Next: run service.bat as Administrator.'
     exit 0
 }
 catch {
     Write-Host ''
-    Write-Host ('INSTALLATION FAILED: ' + $_.Exception.Message) -ForegroundColor Red
-    Write-Host 'The installer stops if any downloaded file differs from the pinned upstream version.'
+    Write-Host ('RUNTIME SETUP FAILED: ' + $_.Exception.Message) -ForegroundColor Red
     exit 1
 }
 finally {
