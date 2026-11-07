@@ -9,3 +9,5 @@ logs/
 
 # Selected local strategy (written by service.bat)
 data/selected-profile.txt
+
+data/ipset-mode.txt
