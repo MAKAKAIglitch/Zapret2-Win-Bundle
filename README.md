@@ -24,7 +24,7 @@ The installer does not execute the downloaded binaries. The selected upstream co
 
 ## Strategies
 
-The selector now offers 15 root-level profiles:
+The selector now offers 17 root-level profiles:
 
 - General — balanced static HTTP/TLS/QUIC profile.
 - General ALT — alternate TLS fingerprint/SNI handling.
@@ -39,6 +39,8 @@ The selector now offers 15 root-level profiles:
 - General Window (WSSIZE) — small TCP receive window plus multisplit; experimental and potentially slower.
 - General SynData — experimental SYN-data injection plus the regular HTTP/TLS/QUIC profile.
 - General QUIC Default Fake — uses the built-in default QUIC fake instead of the Google QUIC blob.
+- General HTTP Header Case — HTTP Host/domain case transformation experiments.
+- General HTTP Unix EOL — HTTP line-ending normalization experiment.
 - IPSet ANY AUTO — automatic rotation for all local TCP/UDP ports (1–65535), with no include IP-set restriction.
 - IPSet LOADED AUTO — the same all-port automatic profile, restricted to the 33,336-entry lists/ipset-all.txt.
 
