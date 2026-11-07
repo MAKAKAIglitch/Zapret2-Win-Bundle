@@ -25,7 +25,7 @@ set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=fakedsplit:payload=http_req:ip_auto
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 
 set PROFILE_ARGS=%PROFILE_ARGS% --filter-tcp=443 --filter-l7=tls --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist="%ROOT%lists\list-google.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=tls_client_hello
-set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=hostfakesplit:payload=tls_client_hello:tcp_ts=-1000:tcp_md5:repeats=4
+set PROFILE_ARGS=%PROFILE_ARGS% --lua-desync=hostfakesplit:payload=tls_client_hello:host=www.google.com:tcp_ts=-1000:tcp_md5:repeats=4
 set PROFILE_ARGS=%PROFILE_ARGS% --new
 
 set PROFILE_ARGS=%PROFILE_ARGS% --filter-udp=443 --filter-l7=quic --hostlist="%ROOT%lists\list-general.txt" --hostlist="%ROOT%lists\list-general-user.txt" --hostlist="%ROOT%lists\list-google.txt" --hostlist-exclude="%ROOT%lists\list-exclude.txt" --hostlist-exclude="%ROOT%lists\list-exclude-user.txt" --ipset-exclude="%ROOT%lists\ipset-exclude.txt" --ipset-exclude="%ROOT%lists\ipset-exclude-user.txt" --payload=quic_initial
